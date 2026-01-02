@@ -36,6 +36,12 @@
       <artifactId>audioservers-api</artifactId>
     </dependency>
 
+	    <!-- Lombok for code generation (version inherited from parent properties) -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>

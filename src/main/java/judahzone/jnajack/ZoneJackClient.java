@@ -90,7 +90,26 @@ public abstract class ZoneJackClient extends Thread implements JackProcessCallba
     	jack = Jack.getInstance();
     }
 
-    protected abstract void registerPort(Request req) throws JackException;
+    /**
+     * Default implementation registers the port on the jackclient and schedules the
+     * req.callback().ready(req, port) to run asynchronously. Subclasses that need
+     * the JackPort synchronously (to add it to local lists) can call
+     * {@link #registerPortAndReturn(Request)} instead.
+     */
+    protected void registerPort(Request req) throws JackException {
+        JackPort port = registerPortAndReturn(req);
+        Threads.execute(() -> req.callback().ready(req, port));
+    }
+
+    /**
+     * Register the port and return the created JackPort. This does not call the
+     * callback; caller should invoke the callback (synchronously or asynchronously)
+     * after doing any subclass-specific bookkeeping (for example, adding to
+     * inPorts/outPorts lists).
+     */
+    protected JackPort registerPortAndReturn(Request req) throws JackException {
+        return jackclient.registerPort(req.portName(), req.type(), req.inOut());
+    }
 
 	/** Jack Client created but not started. Register ports in implementation. */
 	protected abstract void initialize() throws Exception;
