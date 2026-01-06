@@ -8,6 +8,7 @@ import judahzone.util.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
+// set (max volume) is Unity gain, ignoring preamp and pan logic
 @Getter public class JackGain implements RTEffect {
 
 public enum Settings {VOLUME, PAN};
