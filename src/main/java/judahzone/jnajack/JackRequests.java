@@ -14,10 +14,10 @@ import org.jaudiolibs.jnajack.JackPort;
 import org.jaudiolibs.jnajack.JackPortFlags;
 import org.jaudiolibs.jnajack.JackPortType;
 
-import judahzone.api.Ports.Connect;
-import judahzone.api.Ports.Query;
-import judahzone.api.Ports.Request;
-import judahzone.api.Ports.Type;
+import judahzone.api.AudioEngine.Connect;
+import judahzone.api.AudioEngine.Query;
+import judahzone.api.AudioEngine.Request;
+import judahzone.api.AudioEngine.Type;
 import judahzone.util.RTLogger;
 import judahzone.util.Threads;
 
@@ -56,8 +56,8 @@ public class JackRequests extends ArrayList<Object> {
     				ports.add(name);
     			}
     			Threads.execute(()-> query.callback().queried(
-						query.type() == judahzone.api.Ports.Type.AUDIO ? ports : null,
-						query.type() == judahzone.api.Ports.Type.MIDI ? ports : null));
+						query.type() == judahzone.api.AudioEngine.Type.AUDIO ? ports : null,
+						query.type() == judahzone.api.AudioEngine.Type.MIDI ? ports : null));
 
     		} else if (o instanceof JackPort p) { // unregister
     			jackclient.unregisterPort(p);

@@ -13,20 +13,20 @@ import org.jaudiolibs.jnajack.JackPort;
 import org.jaudiolibs.jnajack.JackPortFlags;
 import org.jaudiolibs.jnajack.JackPortType;
 
-import judahzone.api.Ports;
-import judahzone.api.Ports.Connect;
-import judahzone.api.Ports.IO;
-import judahzone.api.Ports.PortData;
-import judahzone.api.Ports.Query;
-import judahzone.api.Ports.Request;
-import judahzone.api.Ports.Type;
-import judahzone.api.Ports.Wrapper;
+import judahzone.api.AudioEngine;
+import judahzone.api.AudioEngine.Connect;
+import judahzone.api.AudioEngine.IO;
+import judahzone.api.AudioEngine.PortData;
+import judahzone.api.AudioEngine.Query;
+import judahzone.api.AudioEngine.Request;
+import judahzone.api.AudioEngine.Type;
+import judahzone.api.AudioEngine.Wrapper;
 import judahzone.util.RTLogger;
 import judahzone.util.Threads;
 
 /** Delegates to audio and MIDI ZoneJackClients; queries both clients
     asynchronously and aggregates results via Consumer.accept(...). */
-public class JackHelper implements Ports.Provider, Ports.PortData {
+public class JackHelper implements AudioEngine.Provider, AudioEngine.PortData {
 
     public static final JackPortFlags OUT = JackPortFlags.JackPortIsOutput;
     public static final JackPortFlags IN = JackPortFlags.JackPortIsInput;
@@ -51,8 +51,8 @@ public class JackHelper implements Ports.Provider, Ports.PortData {
 		latch = new CountDownLatch(2);
 		Threads.execute(() -> {
 
-			audioClient.getRequests().add(new Query(Ports.Type.AUDIO, Ports.IO.OUT, this));
-			midiClient.getRequests().add(new Query(Ports.Type.MIDI, Ports.IO.IN, this));
+			audioClient.getRequests().add(new Query(AudioEngine.Type.AUDIO, AudioEngine.IO.OUT, this));
+			midiClient.getRequests().add(new Query(AudioEngine.Type.MIDI, AudioEngine.IO.IN, this));
 
 			try {
 				boolean ok = latch.await(1000, TimeUnit.MILLISECONDS);
@@ -70,7 +70,7 @@ public class JackHelper implements Ports.Provider, Ports.PortData {
 	@Override
 	public void register(Request req) {
 		ZoneJackClient target =
-			req.type() == Ports.Type.MIDI ? midiClient : audioClient;
+			req.type() == AudioEngine.Type.MIDI ? midiClient : audioClient;
 		target.getRequests().add(req);
 	}
 
@@ -81,7 +81,7 @@ public class JackHelper implements Ports.Provider, Ports.PortData {
 
 
 		ZoneJackClient target =
-			req.type() == Ports.Type.MIDI ? midiClient : audioClient;
+			req.type() == AudioEngine.Type.MIDI ? midiClient : audioClient;
 		target.getRequests().add(p);
 	}
 
@@ -89,18 +89,18 @@ public class JackHelper implements Ports.Provider, Ports.PortData {
 	@Override
 	public void connect(Connect con) {
 		ZoneJackClient target =
-			con.type() == Ports.Type.MIDI ? midiClient : audioClient;
+			con.type() == AudioEngine.Type.MIDI ? midiClient : audioClient;
 		target.getRequests().add(con);
 	}
 
 	/** Convert Ports.Type to JackPortType. */
-	static JackPortType portsTypeToJack(Ports.Type type) {
-		return type == Ports.Type.AUDIO ? JackPortType.AUDIO : JackPortType.MIDI;
+	static JackPortType portsTypeToJack(AudioEngine.Type type) {
+		return type == AudioEngine.Type.AUDIO ? JackPortType.AUDIO : JackPortType.MIDI;
 	}
 
 	/** Convert Ports.IO to JackPortFlags. */
-	static EnumSet<JackPortFlags> portsIOToJack(Ports.IO dir) {
-		return dir == Ports.IO.IN ? INS : OUTS;
+	static EnumSet<JackPortFlags> portsIOToJack(AudioEngine.IO dir) {
+		return dir == AudioEngine.IO.IN ? INS : OUTS;
 	}
 
 	@Override

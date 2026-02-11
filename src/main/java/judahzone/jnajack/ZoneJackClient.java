@@ -14,8 +14,8 @@ import org.jaudiolibs.jnajack.JackProcessCallback;
 import org.jaudiolibs.jnajack.JackShutdownCallback;
 import org.jaudiolibs.jnajack.JackStatus;
 
-import judahzone.api.Ports.Request;
-import judahzone.api.Ports.Wrapper;
+import judahzone.api.AudioEngine.Request;
+import judahzone.api.AudioEngine.Wrapper;
 import judahzone.util.RTLogger;
 import judahzone.util.Threads;
 import lombok.Getter;
