@@ -25,7 +25,7 @@ public class BasicPlayer implements PlayAudio {
 	protected Recording recording = new Recording();
 	protected Asset asset;
 	protected File file;
-	@Setter protected float env = 0.5f;
+	@Setter protected float amp = 0.5f;
 	@Setter protected Type type = Type.ONE_SHOT;
 	@Setter protected Played played;
 
@@ -113,8 +113,8 @@ public class BasicPlayer implements PlayAudio {
 	    // Mix the requested frame
 	    float[][] buf = localRec.get(frame);
 	    if (buf != null) {
-	        AudioTools.mix(buf[LEFT], env, outLeft);
-	        AudioTools.mix(buf[RIGHT], env, outRight);
+	        AudioTools.mix(buf[LEFT], amp, outLeft);
+	        AudioTools.mix(buf[RIGHT], amp, outRight);
 	    }
 
 	    // After playing the frame, if it was the last frame prepare wrapping/stopping
