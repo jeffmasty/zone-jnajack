@@ -37,7 +37,7 @@ package judahzone.jnajack.fx;
 import java.nio.FloatBuffer;
 import java.security.InvalidParameterException;
 
-import judahzone.api.TimeFX;
+import judahzone.api.FX.TimeFX;
 import judahzone.jnajack.fx.JNAEffect.RTEffect;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +70,7 @@ public class JackChorus implements JNATime, RTEffect {
 
     @Override
     public void sync(float unit) {
-        int reverseIndex = TimeFX.TYPE.length - TimeFX.indexOf(type);
+        int reverseIndex = JNATime.TYPE.length - JNATime.indexOf(type);
         rate = 0.001f * (unit + unit * reverseIndex);
     }
 
@@ -92,7 +92,7 @@ public class JackChorus implements JNATime, RTEffect {
         if (idx == Settings.Feedback.ordinal())
             return Math.round(getFeedback() * 100);
         if (idx == Settings.Type.ordinal())
-            return TimeFX.indexOf(type);
+            return JNATime.indexOf(type);
         if (idx == Settings.Sync.ordinal())
             return sync ? 1 : 0;
         if (idx == Settings.Phase.ordinal())
